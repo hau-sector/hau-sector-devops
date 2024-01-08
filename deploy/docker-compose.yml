@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  adapter:
+    image: "ghcr.io/hau-sector/hau-sector-adapter-mock:${VERSION__ADAPTER}"
+    environment:
+      CORS: true
+      DEBUG: true
+      AUTH0_ISSUER: $AUTH0__DOMAIN
+      AUTH0_AUDIENCE: $DEPLOY__HOST/graphql
+    expose:
+      - 8888
+    networks:
+      - internal
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://adapter:5000/health
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 1m
+
+  client:
+    image: "ghcr.io/hau-sector/hau-sector-client:${VERSION__CLIENT}"
+    expose:
+      - 8080
+    networks:
+      - internal
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://client:80
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 1m
+
+  caddy:
+    image: caddy:alpine
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data/caddy/data:/data:rw
+    networks:
+      - internal
+    restart: unless-stopped
+    healthcheck:
+      test: curl -f http://caddy:80/health
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 1m
+
+networks:
+  internal:

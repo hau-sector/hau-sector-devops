@@ -1,0 +1,16 @@
+localhost {
+    handle_path /* {
+        encode gzip
+        reverse_proxy hau-sector-client-1:8080
+    }
+
+    handle_path /graphql {
+        rewrite * /graphql
+        encode gzip
+        reverse_proxy hau-sector-adapter-1:8888
+    }
+
+    handle_path /health {
+        respond 200
+    }
+}
