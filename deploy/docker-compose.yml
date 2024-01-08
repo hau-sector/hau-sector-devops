@@ -14,7 +14,7 @@ services:
       - internal
     restart: unless-stopped
     healthcheck:
-      test: curl -f http://adapter:5000/health
+      test: curl -f http://adapter:8888/health
       interval: 1m
       timeout: 10s
       retries: 5
@@ -28,7 +28,7 @@ services:
       - internal
     restart: unless-stopped
     healthcheck:
-      test: curl -f http://client:80
+      test: curl -f http://client:8080
       interval: 1m
       timeout: 10s
       retries: 5
