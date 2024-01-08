@@ -7,7 +7,7 @@ services:
       CORS: true
       DEBUG: true
       AUTH0_ISSUER: $AUTH0__DOMAIN
-      AUTH0_AUDIENCE: $DEPLOY__HOST/graphql
+      AUTH0_AUDIENCE: https://$DEPLOY__DOMAIN/graphql
     expose:
       - 8888
     networks:
@@ -36,6 +36,8 @@ services:
 
   caddy:
     image: caddy:alpine
+    environment:
+      DOMAIN: $DEPLOY__DOMAIN
     ports:
       - "443:443"
       - "80:80"
