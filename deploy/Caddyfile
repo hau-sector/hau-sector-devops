@@ -1,4 +1,4 @@
-{$DOMAIN} {
+hau-sector.ru, hau-sector.online {
     handle_path /* {
         encode gzip
         reverse_proxy hau-sector-client-1:8080
